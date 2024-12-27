@@ -3,23 +3,21 @@ plugins {
   id 'eclipse-wtp'
 }
 
-version = "1.0.0.0"
-
-sourceCompatibility = 11
+version = "2.0.0.0"
 
 repositories {
     mavenCentral()
 }
 
 ext {
-	iTextVersion = '[7.1.17,)'
+	iTextVersion = '[9.0.0,)'
 }
 
 dependencies {
 	implementation "com.itextpdf:io:${iTextVersion}"
 	implementation "com.itextpdf:layout:${iTextVersion}"
 	implementation "com.itextpdf:styled-xml-parser:${iTextVersion}"
-	implementation "com.itextpdf:html2pdf:[3.0.5,)"
+	implementation "com.itextpdf:html2pdf:[6.0.0,)"
 }
 
 jar {
@@ -35,17 +33,17 @@ jar {
 
 def baseName = 'xml2pdf'
 
-task deleteLibs(type: Delete) {
-    delete fileTree(dir: "${buildDir}/libs/"+"$baseName"+"_lib", include: '**.jar')
+tasks.register("deleteLibs", Delete) {
+    delete fileTree(dir: "${layout.buildDirectory.get()}/libs/"+"$baseName"+"_lib", include: '**.jar')
 }
 
-task copyLibs(type: Copy) {
+tasks.register("copyLibs", Copy) {
 	//dependsOn deleteLibs
-    into "${buildDir}/libs/"+"$baseName"+"_lib"
+    into "${layout.buildDirectory.get()}/libs/"+"$baseName"+"_lib"
     from configurations.runtimeClasspath
 }
 
-task customFatJar(type: Jar) {
+tasks.register("customFatJar", Jar) {
 	dependsOn copyLibs
 	
     archiveBaseName = baseName
