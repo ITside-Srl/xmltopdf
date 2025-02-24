@@ -3,6 +3,9 @@ plugins {
   id 'eclipse-wtp'
 }
 
+sourceCompatibility = 8
+targetCompatibility = 8
+
 version = "2.0.0.0"
 
 repositories {
